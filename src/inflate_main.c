@@ -3,6 +3,7 @@
 
 int inflate_calculate_optimal_size(void* src, int size){
 	compression_config optimal = inflate_find_optimal_compression(src, size, 0);
+	if(!optimal.lunits){ return 0; }
 	int result = optimal.huffman ? optimal.huffman : optimal.size;
 	result += sizeof(inflate_header);
 	return result;
