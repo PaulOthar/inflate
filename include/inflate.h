@@ -14,12 +14,14 @@ typedef struct{
 
 /**
  * Finds the most optimal size, that being no compression | just LZSS | LZSS + Huffman.
+ * Huffman specifically must be manually allowed at the designed parameter.
  * @fn int inflate_calculate_optimal_size(void*, int)
  * @param src Pointer to the binary data
  * @param size Size of the data to be compressed
+ * @param allow_huffman Specifies intention of using huffman or not
  * @return Size of the most optimal compression (header included)
  */
-int inflate_calculate_optimal_size(void* src, int size);
+int inflate_calculate_optimal_size(void* src, int size, int allow_huffman);
 
 /**
  * Compresses with specific constraints. Does not attempt to find the most optimal option.
@@ -34,24 +36,16 @@ int inflate_calculate_optimal_size(void* src, int size);
 int inflate_compress_constrained(void* src, void* dest, int size, int lzss_offset, int lzss_length);
 
 /**
- * Attempts compression with just basic LZSS. It does try to find the most optimal LZSS configuration. (Slower than constrained)
- * @fn int inflate_compress_simplified(void*, void*, int)
- * @param src Pointer to the binary data to be compressed
- * @param dest Pointer to the destination memory
- * @param size Size of the data to be compressed
- * @return Size of the compressed data
- */
-int inflate_compress_simplified(void* src, void* dest, int size);
-
-/**
- * Attempts compression with LZSS and Huffman. It does try to find the most optimal configuration overall. (Slowest version)
+ * Attempts compression with LZSS and Huffman. It does try to find the most optimal configuration overall.
+ * Huffman specifically must be manually allowed at the designed parameter.
  * @fn int inflate_compress_complete(void*, void*, int)
  * @param src Pointer to the binary data to be compressed
  * @param dest Pointer to the destination memory
  * @param size Size of the data to be compressed
+ * @param allow_huffman Specifies intention of using huffman or not
  * @return Size of the compressed data
  */
-int inflate_compress_complete(void* src, void* dest, int size);
+int inflate_compress(void* src, void* dest, int size, int allow_huffman);
 
 /**
  * Attempts decompression of the source binary.

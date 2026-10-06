@@ -1,8 +1,8 @@
 #include "inflate.h"
 #include "inflate_execution_internal.h"
 
-int inflate_calculate_optimal_size(void* src, int size){
-	compression_config optimal = inflate_find_optimal_compression(src, size, 0);
+int inflate_calculate_optimal_size(void* src, int size, int allow_huffman){
+	compression_config optimal = inflate_find_optimal_compression(src, size, allow_huffman);
 	if(!optimal.lunits){ return 0; }
 	int result = optimal.huffman ? optimal.huffman : optimal.size;
 	result += sizeof(inflate_header);
@@ -11,21 +11,8 @@ int inflate_calculate_optimal_size(void* src, int size){
 
 //----------------------------------------------------------------------------------------------------------------
 
-int inflate_compress_simplified(void* src, void* dest, int size){
-	compression_config optimal = inflate_find_optimal_compression(src, size, 0);
-
-	if(optimal.lunits){
-		return inflate_compress_constrained(src, dest, size, optimal.offset, optimal.length);
-	}
-	else{//Any attempt of compression at this point would render a inefficient result
-		//TODO
-	}
-
-	return 0;
-}
-
-int inflate_compress_complete(void* src, void* dest, int size){
-	compression_config optimal = inflate_find_optimal_compression(src, size, 1);
+int inflate_compress(void* src, void* dest, int size, int allow_huffman){
+	compression_config optimal = inflate_find_optimal_compression(src, size, allow_huffman);
 
 	if(optimal.huffman){
 		//TODO

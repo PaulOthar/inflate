@@ -48,7 +48,7 @@ static void _test_compression_lzss(char* ptr, int size, compression_config* styl
 
 	for(int i = 0; i < size; lunits_count++){
 		i += inflate_lzss_compress(ptr, size, i, &lunit, offset, length, lzss_minimum);
-		result += lunit.data ? 1 : lzss_minimum;
+		result += lunit.is_symbol ? 1 : lzss_minimum;
 	}
 
 	result += (lunits_count + 7) >> 3;
